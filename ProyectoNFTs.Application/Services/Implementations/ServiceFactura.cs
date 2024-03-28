@@ -47,11 +47,11 @@ public class ServiceFactura : IServiceFactura
         // Validate Stock availability
         foreach (var item in dto.ListFacturaDetalle)
         {
-            var producto = await _repositoryNFT.FindByIdAsync(item.IdNft);
+            var nft = await _repositoryNFT.FindByIdAsync(item.IdNft);
 
-            if (producto.Cantidad - item.Cantidad < 0)
+            if (nft.Cantidad - item.Cantidad < 0)
             {
-                throw new BadHttpRequestException($"No hay stock para el producto {producto.Nombre}, cantidad en stock {producto.Cantidad} ");
+                throw new BadHttpRequestException($"No hay stock para el nft {nft.Nombre}, cantidad en stock {nft.Cantidad} ");
              
             }
         }
@@ -59,7 +59,7 @@ public class ServiceFactura : IServiceFactura
         var @object = _mapper.Map<FacturaEncabezado>(dto);
         var cliente = await _repositoryCliente.FindByIdAsync(dto.IdCliente);
         // Send email
-        await SendEmail(cliente!.Email!);
+        //await SendEmail(cliente!.Email!);
         return await _repositoryFactura.AddAsync(@object);
     }
 

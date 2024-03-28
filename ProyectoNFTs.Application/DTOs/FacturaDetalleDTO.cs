@@ -21,7 +21,6 @@ public record FacturaDetalleDTO
     [Display(Name = "NFT")]
     public Guid IdNft { get; set; }
 
-    
     [Display(Name = "Nombre NFT")]
     public string NombreNFT { get; set; } = default!;
 

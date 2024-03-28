@@ -17,7 +17,6 @@ public class RepositoryFactura : IRepositoryFactura
     public RepositoryFactura(ProyectoNFTsContext context)
     {
         _context = context;
-
     }
     public async Task<int> AddAsync(FacturaEncabezado entity)
     {
@@ -90,9 +89,6 @@ public class RepositoryFactura : IRepositoryFactura
 
     }
 
-
-
-
     /// <summary>
     /// Get sequence in order to assign Receipt number.   
     /// Automaticaly INCREMENT ++
@@ -120,23 +116,18 @@ public class RepositoryFactura : IRepositoryFactura
                 adapter.Fill(dataTable);
             }
         }
-
-
         siguiente = Convert.ToInt32(dataTable.Rows[0][0].ToString());
         return siguiente;
 
     }
 
-
     public async Task<FacturaEncabezado> FindByIdAsync(int id)
     {
-
         var response = await _context.Set<FacturaEncabezado>()
                     .Include(detalle => detalle.FacturaDetalle)
                     .ThenInclude(detalle => detalle.IdNftNavigation)
                     .Include(cliente => cliente.IdClienteNavigation)
                     .Where(p => p.IdFactura == id).FirstOrDefaultAsync();
-
         return response!;
     }
 }

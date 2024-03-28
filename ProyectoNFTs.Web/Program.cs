@@ -42,6 +42,7 @@ builder.Services.AddAutoMapper(config =>
     config.AddProfile<PaisProfile>();
     config.AddProfile<NftProfile>();
     config.AddProfile<TarjetaProfile>();
+    config.AddProfile<FacturaProfile>();
 });
 
 // Config Connection to SQLServer DataBase
