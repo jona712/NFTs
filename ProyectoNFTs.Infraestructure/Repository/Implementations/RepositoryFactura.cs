@@ -20,7 +20,6 @@ public class RepositoryFactura : IRepositoryFactura
     }
     public async Task<int> AddAsync(FacturaEncabezado entity)
     {
-
         try
         {
             // Get No Receipt
