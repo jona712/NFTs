@@ -1,125 +1,178 @@
-﻿@using System.Text.Json
-@using ProyectoNFTs.Application.DTOs
-@model ProyectoNFTs.Application.DTOs.FacturaEncabezadoDTO
+﻿@model ProyectoNFTs.Application.DTOs.FacturaEncabezadoDTO
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Factura";
 }
 
-<!-- OJO style requerido para que funcione Modal con Autocomplete 26-02-2024 -->
-<style>
-    ul.ui-autocomplete {
-        z-index: 1100;
-    }
-</style>
+<div class="card">
+    <div class="card-header">Factura</div>
+    <div class="card-body">
 
-<form asp-action="Create" id="myForm"
-      data-ajax="true"
-      data-ajax-method="POST"
-      data-ajax-begin="onBegin"
-      data-ajax-failure="onFailure"
-      data-ajax-success="onSuccess"
-      data-ajax-complete="onComplete">
-    <div class="card">
-        <div class="card-header">
-            <!-- Factura
-             <button style="position: absolute; top: 0; right: 0" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModal" onclick="">Add Product</button>
-            -->
-            <div class="col-md-5">
-                <button class="btn btn-secondary" style="margin-left: 1em" onclick="onClearForm()">Nuevo</button>
-                <input type="submit" style=" " value="Facturar" class="btn btn-primary" />
+        <form asp-action="Create" asp-controller="Factura" id="myForm"
+              data-ajax="true"
+              data-ajax-method="POST"
+              data-ajax-begin="onBegin"
+              data-ajax-failure="onFailure"
+              data-ajax-success="onSuccess"
+              data-ajax-complete="onComplete">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="d-flex gap-2  ">
+                <div class=" ">
+                    <label asp-for="IdFactura" class="control-label fw-normal"></label>
+                    <input asp-for="IdFactura" class="form-control form-control-sm" value="@ViewBag.CurrentReceipt" readonly />
+                    <span asp-validation-for="IdFactura" class="text-danger"></span>
+                </div>
+                <div class=" ">
+                    <label asp-for="IdCliente" class="control-label"></label>
+                    <input asp-for="IdCliente" type="text" class="form-control" />
+                    <span asp-validation-for="IdCliente" class="text-danger"></span>
+                    <label id="NombreCliente" class="control-label fw-bold">-</label>
+                </div>
+                <div class=" ">
+                    <label asp-for="IdTarjeta" class="control-label"></label>
+                    @Html.DropDownListFor(m => m.IdTarjeta,
+                             new SelectList(ViewBag.ListTarjeta, "IdTarjeta", "Descripcion"), new { @class = "form-select form-select-sm " })
+                    <span asp-validation-for="IdTarjeta" class="text-danger"></span>
+                </div>
+
+                <div class="  ">
+                    <label asp-for="TarjetaNumero" class="control-label"></label>
+                    <input asp-for="TarjetaNumero" class="form-control" />
+                    <span asp-validation-for="TarjetaNumero" class="text-danger"></span>
+                </div>
+                <div class="  ">
+                    <label></label>
+                    <input type="submit" value="Salvar" class="form-control btn btn-success" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<br />
+
+<div c lass="card">
+    <div class="card-header">Detalle</div>
+    <div class="card-body">
+        <div class="d-flex gap-3">
+            <div>
+                <label>Código Nft</label>
+                <input type="text" id="IdNft" class="form-control" />
+                <label id="NftNombre" class="control-label fw-bold">-</label>
+            </div>
+            <div>
+                <!-- <label >Cantidad Inventario</label>-->
+                <input type="hidden" readonly id="CantidadEnInventario" class="form-control" />
+            </div>
+            <div>
+                <label>Cantidad</label>
+                <input type="number" id="cantidad" class="form-control" />
+            </div>
+            <div>
+                <label>Precio</label>
+                <input type="number" id="precio" readonly class="form-control" />
+            </div>
+
+            <div>
+                <label></label>
+                <button class="btn btn-primary form-control" onclick="addProduct()">Agregar</button>
+            </div>
+
+            <div class="col-md-1 text-center" style="display:flex; flex-direction:column; justify-content:center; align-items:center;">
+                <img src="/Images/nophoto.jpg" class="img-responsive" style="height:50%;width:50%; margin-top:25px;" id="ImgNft">
+                <div>
+                    <label id="NftNombre" name="NftNombre" class="fw-bold"></label>
+
+                    <!--Hidden field with stock-->
+                    <input type="hidden" id="CantidadEnInventario" />
+                </div>
+
             </div>
         </div>
-        <div class="card-body">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-5">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="form-group">
-                            <label asp-for="IdFactura" class="control-label fw-normal"></label>
-                            <input asp-for="IdFactura" class="form-control form-control-sm" value="@ViewBag.CurrentReceipt" readonly />
-                            <span asp-validation-for="IdFactura" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="IdTarjeta" class="control-label"></label>
-                            @Html.DropDownListFor(m => m.IdTarjeta,
-                                     new SelectList(ViewBag.ListTarjeta, "IdTarjeta", "Descripcion"), new { @class = "form-select form-select-sm " })
+    </div>
 
-                            <span asp-validation-for="IdTarjeta" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="TarjetaNumero" class="control-label"></label>
-                            <input asp-for="TarjetaNumero" class="form-control form-control-sm" />
-                            <span asp-validation-for="TarjetaNumero" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="IdCliente" class="control-label"></label>
-                            <input asp-for="IdCliente" class="form-control form-control-sm" style="text-transform:uppercase" />
-                            <span asp-validation-for="IdCliente" class="text-danger"></span>
-                            <label id="NombreCliente" class="control-label fw-bold">-</label>
-                        </div>
+    <div id="divDetalleFactura" class="px-3"></div>
+</div>
 
-                        @*  <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModal" onclick="">Add Product</button>*@
+@* <h1>MI DISENO</h1>
+<div class="card">
+    <div class="card-header">
+        <!-- Factura
+         <button style="position: absolute; top: 0; right: 0" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModal" onclick="">Add Product</button>
+        -->
+        <div class="col-md-5">
+            <button class="btn btn-secondary" style="margin-left: 1em" onclick="onClearForm()">Nuevo</button>
+            <input type="submit" style=" " value="Facturar" class="btn btn-primary" />
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="IdFactura" class="control-label fw-normal"></label>
+                        <input asp-for="IdFactura" class="form-control form-control-sm" value="@ViewBag.CurrentReceipt" readonly />
+                        <span asp-validation-for="IdFactura" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="IdTarjeta" class="control-label"></label>
+                        @Html.DropDownListFor(m => m.IdTarjeta,
+                                 new SelectList(ViewBag.ListTarjeta, "IdTarjeta", "Descripcion"), new { @class = "form-select form-select-sm " })
+
+                        <span asp-validation-for="IdTarjeta" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="TarjetaNumero" class="control-label"></label>
+                        <input asp-for="TarjetaNumero" class="form-control form-control-sm" />
+                        <span asp-validation-for="TarjetaNumero" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="IdCliente" class="control-label"></label>
+                        <input asp-for="IdCliente" class="form-control form-control-sm" style="text-transform:uppercase" />
+                        <span asp-validation-for="IdCliente" class="text-danger"></span>
+                        <label id="NombreCliente" class="control-label fw-bold">-</label>
                     </div>
 
-                    <div class="col-md-7">
-                        <!-- Solamente se muestra la primera vez como efecto visual-->
-                        @await Html.PartialAsync("_AddProduct")
-                        <!-- Detail View -->
-                    </div>
+                    @*  <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModal" onclick="">Add Product</button>*@
+@*  </div>
 
-                    <div class="col-md-12" style="margin-top:50px">
-                        <!-- Solamente se muestra la primera vez como efecto visual-->
-                        @await Html.PartialAsync("_DetailFactura")
-                        <!-- Detail View -->
-                        <div id="detalleFacturaView"></div>
-                    </div>
+                <div class="col-md-7">
+                    <!-- Solamente se muestra la primera vez como efecto visual-->
+                    @await Html.PartialAsync("_AddProduct")
+                    <!-- Detail View -->
+                </div>
+
+                <div class="col-md-12" style="margin-top:50px">
+                    <!-- Solamente se muestra la primera vez como efecto visual-->
+                    @await Html.PartialAsync("_DetailFactura")
+                    <!-- Detail View -->
+                    <div id="detalleFacturaView"></div>
                 </div>
             </div>
         </div>
     </div>
-    <br />
-</form>
-
-<!-------------------------------------- Modal ----------------------------->
-<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Nfts</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Etiqueta mostrar donde se inyecta el partialview-->
-                <div id="mostrar" class=""></div>
-                @await Html.PartialAsync("_AddProduct")
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!------------------------------------ Fin Modal ----------------------------->
+</div> *@
+<br />
 
 
 @section Scripts {
     <script>
-     
+
         ///////////////////////////////////////////////////////////////////
         // Autocomplete Modal NftId search by Product Name
         ///////////////////////////////////////////////////////////////////
-        $("#IdNftModal").autocomplete({
+        $("#IdNft").autocomplete({
             source: function (request, response) {
-                var id = $("#IdNftModal").val();
+                var id = $("#IdNft").val();
                 //debugger;
 
                 // default IMAGE NO-IMAGE
                 $("#ImgNft").attr("src", "/Images/nophoto.jpg");
                 // Clear Product Name
-                $("#NftNombreModal").html("")
-                $("#PrecioModal").val("");
+                $("#NftNombre").html("")
+                $("#precio").val("");
                 $("#Cantidad").val("");
-                $("#CantidadEnInventarioModal").val("");
+                $("#CantidadEnInventario").val("");
                 $.ajax({
                     type: "GET",
                     url: "/Nft/GetNftByName",
@@ -143,14 +196,14 @@
             select: function (event, ui) {
 
                 // Show data
-                $("#IdNftModal").val(ui.item.value)
-                $("#NftNombreModal").html(ui.item.label + " - Inventario:" + ui.item.data.cantidad)
-                $("#PrecioModal").val(ui.item.data.precio)
-                $("#IdNftModal").focus();
+                $("#IdNft").val(ui.item.value)
+                $("#NftNombre").html(ui.item.label + " - Inventario:" + ui.item.data.cantidad)
+                $("#precio").val(ui.item.data.precio)
+                $("#IdNft").focus();
                 // Show the image, it isn't necesary to convert to Base64 since it comes from Json
                 $("#ImgNft").attr("src", "data:image/jpeg;charset=utf-8;base64," + ui.item.data.imagen);
-                $("#CantidadEnInventarioModal").val(ui.item.data.cantidad);
-                $('.btn-success').prop('disabled', false);
+                $("#CantidadEnInventario").val(ui.item.data.cantidad);
+                //$('.btn-success').prop('disabled', false);
                 return false;
             }
         });
@@ -214,19 +267,14 @@
         // Add cardshoping Product
         ///////////////////////////////////////////////////////////////////////////////////////////////
         function addProduct() {
-            let idProductModal = document.getElementById("IdNftModal").value;
-            let cantidadModal = document.getElementById("CantidadModal").value;
-            let precioModal = document.getElementById("PrecioModal").value;
-            let detallefacturaBorrar = document.getElementById("detalleFactura");
-            let divFactura = document.getElementById("detalleFacturaView");
-            let cantidadEnInventarioModal = document.getElementById("CantidadEnInventarioModal").value;
-            let btnAddProdcuto = document.getElementById("BtnAddProduct");
-
-            // Clear dummy detail Card
-            document.getElementById("myCard").innerHTML = "";
+            let idNft = document.getElementById("IdNft").value;
+            let cantidad = document.getElementById("cantidad").value;
+            let precio = document.getElementById("precio").value;
+            let divDetalleFactura = document.getElementById("divDetalleFactura");
+            let cantidadEnInventario = document.getElementById("CantidadEnInventario").value;
 
             // Validation
-            if ($.isNumeric(idProductModal) == null) {
+            if (idNft == null) {
                 Swal.fire({
                     title: "Error!",
                     text: "Ingrese el NFT!",
@@ -234,8 +282,9 @@
                 });
                 return;
             }
+
             // Validation
-            if ($.isNumeric(cantidadModal) == false) {
+            if ($.isNumeric(cantidad) == false) {
                 Swal.fire({
                     title: "Error!",
                     text: "Ingrese la cantidad!",
@@ -245,9 +294,8 @@
                 return;
             }
 
-
             // Validation
-            if (parseInt(cantidadModal) <= 0) {
+            if (parseInt(cantidad) <= 0) {
                 Swal.fire({
                     title: "Error!",
                     text: "La cantidad debe ser mayor a CERO!",
@@ -257,7 +305,7 @@
             }
 
             // Validate stock?
-            if (parseInt(cantidadModal) > parseInt(cantidadEnInventarioModal)) {
+            if (parseInt(cantidad) > parseInt(CantidadEnInventario)) {
 
                 Swal.fire({
                     title: "Error!",
@@ -267,7 +315,7 @@
                 return;
             }
 
-            const myRequest = "/Factura/AddProduct?id=" + idProductModal + "&cantidad=" + cantidadModal
+            const myRequest = "/Factura/AddProduct?id=" + idNft + "&cantidad=" + cantidad
 
             const options = {
                 method: 'GET'
@@ -286,7 +334,7 @@
                 })
                 .then((text) => {
                     //console.log(results)
-                    divFactura.innerHTML = text
+                    divDetalleFactura.innerHTML = text
                 }).catch(error => {
                     // show error
                     Swal.fire({
@@ -300,14 +348,14 @@
 
             //detallefacturaBorrar.remove()
             // Clear fields
-            $("#IdNftModal").val("");
-            $("#PrecioModal").val("");
-            $("#NftNombreModal").html("");
-            $("#CantidadModal").val("");
-            $("#CantidadEnInventarioModal").val("");
+            $("#IdNft").val("");
+            $("#precio").val("");
+            $("#NftNombre").html("");
+            $("#cantidad").val("");
+            $("#CantidadEnInventario").val("");
             // Clear image... NoPhoto
             $("#ImgNft").attr("src", "/Images/nophoto.jpg");
-            $('.btn-success').prop('disabled', true);    
+            //$('.btn-success').prop('disabled', true);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -315,7 +363,7 @@
         ///////////////////////////////////////////////////////////////////////////////////////////////
         function deleteProduct(secuence) {
             console.log("Borrar " + secuence)
-            const divFactura = document.getElementById("detalleFacturaView");
+            const divDetalleFactura = document.getElementById("divDetalleFactura");
             const myRequest = "/Factura/DeleteProduct?id=" + secuence
             const options = {
                 method: 'GET'
@@ -332,20 +380,17 @@
                     return response.text();
                 })
                 .then((text) => {
-                    divFactura.innerHTML = text
+                    divDetalleFactura.innerHTML = text
 
                 }).catch(error => {
-
                     // show error
                     Swal.fire({
                         title: "Error",
                         text: error,
                         icon: "error"
                     })
-
                 })
         }
-
     </script>
 
     <!------------------------------------------------------------------------------------------------->
@@ -390,7 +435,7 @@
         }
     </script>
 
- 
+
     <!-- Otros-->
     <script>
         function onClearForm() {
@@ -402,30 +447,26 @@
             // Delete table
             document.getElementById("detalleFacturaView").innerHTML = ""
             //Desahabilita el btn AddProduct
-            $('.btn-success').prop('disabled', true);
+            //$('.btn-success').prop('disabled', true);
         }
-
-        $('#myForm').on('submit', function () {
-            $('#MyAddProduct').find('input, textarea, select').attr('form', 'otherForm');
-        });
 
         $(document).ready(function () {
             // Deshabilita el botón al inicio
-            $('.btn-success').prop('disabled', true);
+            //$('.btn-success').prop('disabled', true);
 
             // Verifica el valor del campo "IdNft" cada vez que cambia
-            $('#IdNftModal').on('input', function () {
+            $('#IdNft').on('input', function () {
                 if ($(this).val().trim() === '') {
                     // Si el campo "IdNft" está vacío, deshabilita el botón
                     // Clear fields
-                    $("#IdNftModal").val("");
-                    $("#PrecioModal").val("");
-                    $("#NftNombreModal").html("");
-                    $("#CantidadModal").val("");
-                    $("#CantidadEnInventarioModal").val("");
+                    $("#IdNft").val("");
+                    $("#precio").val("");
+                    $("#NftNombre").html("");
+                    $("#cantidad").val("");
+                    $("#CantidadEnInventario").val("");
                     // Clear image... NoPhoto
                     $("#ImgNft").attr("src", "/Images/nophoto.jpg");
-                    $('.btn-success').prop('disabled', true);
+                    //$('.btn-success').prop('disabled', true);
                 }
             });
         });

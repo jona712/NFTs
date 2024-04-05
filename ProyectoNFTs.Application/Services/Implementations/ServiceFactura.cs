@@ -105,6 +105,5 @@ public class ServiceFactura : IServiceFactura
         };
         await smtpClient.SendMailAsync(mailMessage);
         return true;
-
     }
 }

@@ -9,12 +9,14 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="QuestPDF" Version="2023.12.6" />
-	  <!-- Agregar la referencia a Microsoft.AspNetCore.App -->
-	  <PackageReference Include="Microsoft.AspNetCore.App" Version="X.X.X" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ProyectoNFTs.Infraestructure\ProyectoNFTs.Infraestructure.csproj" />
   </ItemGroup>
+
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
 
 </Project>

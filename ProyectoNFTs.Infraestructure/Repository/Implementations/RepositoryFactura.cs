@@ -24,6 +24,10 @@ public class RepositoryFactura : IRepositoryFactura
         {
             // Get No Receipt
             entity.IdFactura = GetNoReceipt();
+
+            //Inserccion de la fecha actual
+            entity.FechaFacturacion = DateTime.Now;
+
             // Reenumerate
             entity.FacturaDetalle.ToList().ForEach(p => p.IdFactura = entity.IdFactura);
             // Begin Transaction
@@ -41,7 +45,10 @@ public class RepositoryFactura : IRepositoryFactura
                 _context.Set<Nft>().Update(product);
             }
 
+            //---------------------------Aqui se caeeee-------------------------//
+            //SqlTypeException: SqlDateTime overflow. Must be between 1/1/1753 12:00:00 AM and 12/31/9999 11:59:59 PM.
             await _context.SaveChangesAsync();
+
             // Commit
             await _context.Database.CommitTransactionAsync();
 

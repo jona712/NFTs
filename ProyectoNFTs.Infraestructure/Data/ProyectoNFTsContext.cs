@@ -36,17 +36,17 @@ public partial class ProyectoNFTsContext : DbContext
 
             entity.Property(e => e.IdCliente).ValueGeneratedNever();
             entity.Property(e => e.Apellido1)
-                .HasMaxLength(20)
+                .HasMaxLength(30)
                 .IsUnicode(false);
             entity.Property(e => e.Apellido2)
-                .HasMaxLength(20)
+                .HasMaxLength(30)
                 .IsUnicode(false);
             entity.Property(e => e.Email)
-                .HasMaxLength(20)
+                .HasMaxLength(100)
                 .IsUnicode(false);
             entity.Property(e => e.FechaNacimiento).HasColumnType("datetime");
             entity.Property(e => e.Nombre)
-                .HasMaxLength(20)
+                .HasMaxLength(30)
                 .IsUnicode(false);
             entity.Property(e => e.Sexo)
                 .HasMaxLength(1)
@@ -64,7 +64,7 @@ public partial class ProyectoNFTsContext : DbContext
             entity.HasKey(e => new { e.IdFactura, e.Secuencia });
 
             entity.Property(e => e.IdNft).HasColumnName("IdNFT");
-            entity.Property(e => e.Precio).HasColumnType("decimal(10, 2)");
+            entity.Property(e => e.Precio).HasColumnType("numeric(18, 2)");
 
             entity.HasOne(d => d.IdFacturaNavigation).WithMany(p => p.FacturaDetalle)
                 .HasForeignKey(d => d.IdFactura)
@@ -100,15 +100,13 @@ public partial class ProyectoNFTsContext : DbContext
 
         modelBuilder.Entity<Nft>(entity =>
         {
-            entity.HasKey(e => e.IdNft);
-
-            entity.ToTable("NFT");
+            entity.HasKey(e => e.IdNft).HasName("PK_NFT");
 
             entity.Property(e => e.IdNft).ValueGeneratedNever();
             entity.Property(e => e.Nombre)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.Precio).HasColumnType("decimal(10, 2)");
+            entity.Property(e => e.Precio).HasColumnType("numeric(18, 2)");
 
             entity.HasMany(d => d.IdCliente).WithMany(p => p.IdNft)
                 .UsingEntity<Dictionary<string, object>>(
@@ -184,6 +182,7 @@ public partial class ProyectoNFTsContext : DbContext
                 .HasForeignKey(d => d.IdRol)
                 .HasConstraintName("FK_Usuario_Rol");
         });
+        modelBuilder.HasSequence("ReceiptNumber");
 
         OnModelCreatingPartial(modelBuilder);
     }

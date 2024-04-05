@@ -7,17 +7,19 @@ namespace ProyectoNFTs.Web.Controllers;
 
 public class FacturaController : Controller
 {
-    private readonly IServiceNft _serviceNFT;
+    private readonly IServiceNft _serviceNft;
     private readonly IServiceTarjeta _serviceTarjeta;
     private readonly IServiceFactura _serviceFactura;
+    private readonly IServiceCliente _serviceCliente;
 
-    public FacturaController(IServiceNft serviceNFT,
+    public FacturaController(IServiceNft serviceNft,
                             IServiceTarjeta serviceTarjeta,
-                            IServiceFactura serviceFactura)
+                            IServiceFactura serviceFactura, IServiceCliente serviceCliente)
     {
-        _serviceNFT = serviceNFT;
+        _serviceNft = serviceNft;
         _serviceTarjeta = serviceTarjeta;
         _serviceFactura = serviceFactura;
+        _serviceCliente = serviceCliente;
     }
 
     public async Task<IActionResult> Index()
@@ -40,21 +42,20 @@ public class FacturaController : Controller
         FacturaDetalleDTO facturaDetalleDTO = new FacturaDetalleDTO();
         List<FacturaDetalleDTO> lista = new List<FacturaDetalleDTO>();
         string json = "";
-        var producto = await _serviceNFT.FindByIdAsync(id);
+
+        var Nft = await _serviceNft.FindByIdAsync(id);
 
         // Stock ??
-
-        if (cantidad > producto.Cantidad)
+        if (cantidad > Nft.Cantidad)
         {
             return BadRequest("No hay inventario suficiente!");
         }
 
-        facturaDetalleDTO.NombreNFT = producto.Nombre;
+        facturaDetalleDTO.NombreNFT = Nft.Nombre;
         facturaDetalleDTO.Cantidad = cantidad;
-        facturaDetalleDTO.Precio = producto.Precio;
+        facturaDetalleDTO.Precio = Nft.Precio;
         facturaDetalleDTO.IdNft = id;
-        facturaDetalleDTO.TotalLinea = Convert.ToDecimal((facturaDetalleDTO.Precio * facturaDetalleDTO.Cantidad));
-
+        facturaDetalleDTO.TotalLinea = Convert.ToDecimal(facturaDetalleDTO.Precio * facturaDetalleDTO.Cantidad);
         if (TempData["CartShopping"] == null)
         {
             lista.Add(facturaDetalleDTO);
@@ -120,13 +121,22 @@ public class FacturaController : Controller
 
     }
 
-
     public async Task<IActionResult> Create(FacturaEncabezadoDTO facturaEncabezadoDTO)
     {
         string json;
         try
         {
+            // IdClient exist?
+            var cliente = await _serviceCliente.FindByIdAsync(facturaEncabezadoDTO.IdCliente);
+            if (cliente == null)
+            {
+                // Keep Cache data
+                TempData.Keep();
+                return BadRequest("Cliente No Existe!");
+            }
 
+
+            // TODO: Validate! 
             if (!ModelState.IsValid)
             {
 
@@ -147,7 +157,6 @@ public class FacturaController : Controller
 
             await _serviceFactura.AddAsync(facturaEncabezadoDTO);
 
-
             return RedirectToAction("Index");
         }
         catch (Exception ex)
@@ -158,3 +167,4 @@ public class FacturaController : Controller
         }
     }
 }
+

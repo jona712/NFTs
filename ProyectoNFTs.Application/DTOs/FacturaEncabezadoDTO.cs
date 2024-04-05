@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,25 +10,18 @@ namespace ProyectoNFTs.Application.DTOs;
 
 public record FacturaEncabezadoDTO
 {
-    [Required(ErrorMessage = "{0} es requerido")]
+   
     [Display(Name = "No. Factura")]
+    [ValidateNever]
     public int IdFactura { get; set; }
 
+    [Display(Name = "Tipo Tarjeta")]
     [Required(ErrorMessage = "{0} es requerido")]
-    [Display(Name = "Tarjeta")]
     public int IdTarjeta { get; set; }
 
-    [Required(ErrorMessage = "{0} es requerido")]
     [Display(Name = "Cliente")]
+    [Required(ErrorMessage = "{0} es requerido")]
     public Guid IdCliente { get; set; }
-
-    [Required(ErrorMessage = "{0} es requerido")]
-    [Display(Name = "Fecha de Facturación")]
-    public DateTime FechaFacturacion { get; set; }
-
-    [Required(ErrorMessage = "{0} es requerido")]
-    [Display(Name = "Estado Factura")]
-    public int EstadoFactura { get; set; }
 
     [Required(ErrorMessage = "{0} es requerido")]
     [Display(Name = "No. Tarjeta")]

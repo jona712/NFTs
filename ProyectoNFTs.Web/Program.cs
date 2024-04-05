@@ -9,8 +9,14 @@ using ProyectoNFTs.Application.Services.Implementations;
 using ProyectoNFTs.Application.Profiles;
 using ProyectoNFTs.Infraestructure.Data;
 using ProyectoNFTs.Application.Config;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
+using ProyectoNFTs.Web;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Mapping AppConfig Class to read  appsettings.json
+builder.Services.Configure<AppConfig>(builder.Configuration);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -31,9 +37,25 @@ builder.Services.AddTransient<IServiceTarjeta, ServiceTarjeta>();
 builder.Services.AddTransient<IRepositoryFactura, RepositoryFactura>();
 builder.Services.AddTransient<IServiceFactura, ServiceFactura>();
 
-// Mapping AppConfig Class to read  appsettings.json
-builder.Services.Configure<AppConfig>(builder.Configuration);
 
+//// Security
+//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+//    .AddCookie(options =>
+//    {
+//        options.LoginPath = "/Login/Index";
+//        options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+//    });
+
+//builder.Services.AddControllersWithViews(options =>
+//{
+//    options.Filters.Add(
+//            new ResponseCacheAttribute
+//            {
+//                NoStore = true,
+//                Location = ResponseCacheLocation.None,
+//            }
+//        );
+//});
 
 // config Automapper
 builder.Services.AddAutoMapper(config =>
@@ -53,9 +75,6 @@ builder.Services.AddDbContext<ProyectoNFTsContext>(options =>
     if (builder.Environment.IsDevelopment())
         options.EnableSensitiveDataLogging();
 });
-
-
-
 
 // Logger
 var logger = new LoggerConfiguration()
@@ -80,13 +99,26 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+else
+{
+    // Error control Middleware
+    app.UseMiddleware<ErrorHandlingMiddleware>();
+}
+
+// Error access control 
+app.UseStatusCodePagesWithReExecute("/error/{0}");
+
+//Add support to logging request with SERILOG
+app.UseSerilogRequestLogging();
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
+
+// Activate Antiforgery DEBE COLOCARSE ACA!
+app.UseAntiforgery();
 
 app.MapControllerRoute(
     name: "default",
