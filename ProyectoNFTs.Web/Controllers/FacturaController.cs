@@ -142,6 +142,7 @@ public class FacturaController : Controller
 
             }
 
+            //Evitar que vaya null
             json = (string)TempData["CartShopping"]!;
 
             if (string.IsNullOrEmpty(json))
@@ -150,6 +151,12 @@ public class FacturaController : Controller
             }
 
             var lista = JsonSerializer.Deserialize<List<FacturaDetalleDTO>>(json!)!;
+
+            //doble validacion para los detalles
+            if (lista.Count == 0 || lista == null)
+            {
+                return BadRequest("No hay datos por facturar");
+            }
 
             //Mismo numero de factura para el detalle FK
             lista.ForEach(p => p.IdFactura = facturaEncabezadoDTO.IdFactura);

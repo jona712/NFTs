@@ -43,6 +43,11 @@ body {
     margin-top: 10px;
 }
 
+#myControlForm {
+    margin-bottom: 10px; /* Puedes ajustar este valor según la separación deseada */
+    margin-top: 10px;
+}
+
 /* Hacer + grande a imagen sobre la image */
 .zoom {
 }
@@ -77,9 +82,9 @@ body {
 }
 
 .nft-details {
-    display:flex;
-    justify-content:center;
-   /* text-align: left;*/
+    display: flex;
+    justify-content: center;
+    /* text-align: left;*/
     margin-top: 20px; /* Espacio entre la imagen y los detalles */
 }
 

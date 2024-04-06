@@ -1,11 +1,12 @@
 ﻿@model IEnumerable<ProyectoNFTs.Application.DTOs.FacturaDetalleDTO>
 
-<div id="myCard">
-    <div class="card">
-        <div class="card-header">
-            <h5>Detalle</h5>
-        </div>
-        <div class="card-body">
+@if (Model != null && Model.Any())
+{
+    <div id="myCard">
+        <div class="card">
+            <div class="card-header">
+                <h5>Detalle</h5>
+            </div>
             <div class="table-responsive">
                 <table class="table table-striped table-hover table-bordered text-center" id="detalleFactura">
                     <thead>
@@ -32,61 +33,47 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @{
-                            if (Model != null)
-                                @foreach (var item in Model)
-                                {
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Secuencia)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.IdNft)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.NombreNFT)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Precio)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Cantidad)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.TotalLinea)
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger" onclick="deleteProduct(@item.Secuencia)">Borrar</button>
-                                        </td>
-                                    </tr>
-                                }
-                            <!-- Add dummy row in order to show totals-->
+                        @foreach (var item in Model)
+                        {
                             <tr>
-                                <td align="center">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Secuencia)
                                 </td>
-                                <td align="center">
+                                <td style="text-transform:uppercase">
+                                    @Html.DisplayFor(modelItem => item.IdNft)
                                 </td>
-                                <td align="center">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.NombreNFT)
                                 </td>
-                                <td align="center">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Precio)
                                 </td>
-                                <td align="center">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Cantidad)
                                 </td>
-
-                                <td align="center">
-                                    @{
-                                        if (Model != null)
-                                            @Model.Sum(p => p.TotalLinea).ToString("###,###.00")
-                                    }
-
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TotalLinea)
                                 </td>
-                                <td align="center">
+                                <td>
+                                    <button type="button" class="btn btn-danger" onclick="deleteProduct(@item.Secuencia)">Borrar</button>
                                 </td>
                             </tr>
                         }
+                        <!-- Add dummy row in order to show totals-->
+                        <tr>
+                            <td align="center"></td>
+                            <td align="center"></td>
+                            <td align="center"></td>
+                            <td align="center"></td>
+                            <td align="center"></td>
+                            <td align="center">
+                                @Model.Sum(p => p.TotalLinea).ToString("###,###.00")
+                            </td>
+                            <td align="center"></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-</div>
+}
