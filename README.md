@@ -1,5 +1,6 @@
 # Gallery NFTs
 
+Sale of NFT.
 
 ## Description
 
