@@ -1,10 +1,9 @@
 # Gallery NFTs
 
-This project, named "Gallery NFTs", is a web application developed using ASP.NET MVC in Visual Studio 2022. It focuses on managing NFTs (Non-Fungible Tokens), clients, cards, countries, and processes such as billing and invoice cancellation. Additionally, it includes security controls with user management. The project utilizes Entity Framework for data access and SQL Server for the database, and it is implemented using C#, HTML, CSS, JavaScript, Bootstrap, and jQuery.
 
 ## Description
 
-The "Gallery NFTs" project provides a platform for managing various aspects related to NFTs, clients, cards, and countries. It includes functionality for processes like billing and invoice cancellation to facilitate efficient management of transactions. The application also incorporates security controls, allowing administrators to manage user access and permissions.
+This project, named "Gallery NFTs", is a web application developed using ASP.NET MVC in Visual Studio 2022. It focuses on managing NFTs (Non-Fungible Tokens), clients, cards, countries, and processes such as billing and invoice cancellation. Additionally, it includes security controls with user management. The project utilizes Entity Framework for data access and SQL Server for the database, and it is implemented using C#, HTML, CSS, JavaScript, Bootstrap, and jQuery.
 
 ## Technologies Used
 
