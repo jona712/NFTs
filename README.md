@@ -4,7 +4,7 @@ Sale of NFT.
 
 ## Description   
 
-This project, called Gallery NFTs, is a web application developed using ASP.NET MVC in Visual Studio 2022. It focuses on the management of NFTs (Non-Fungible Tokens), customers, cards, countries and processes such as invoicing and invoice cancellation. It also includes security controls with user management. The project uses Entity Framework for data access and SQL Server for the database, and is implemented using C#, HTML, CSS, JavaScript, Bootstrap, Ajax, jQuery, as well as notification tools such as to Sweet Alert and Toast.
+This project, called Gallery NFTs, is a web application developed using ASP.NET MVC in Visual Studio 2022. It focuses on the management of NFTs (Non-Fungible Tokens), customers, cards, countries, and processes such as invoicing and invoice cancellation. It also includes security controls with user management. The project uses Entity Framework for data access and SQL Server for the database, and is implemented using C#, HTML, CSS, JavaScript, Bootstrap, Ajax, and jQuery, as well as notification tools such as Sweet Alert and Toast. Additionally, a RESTful API was developed to allow external users to access the information.
 
 ## Technologies Used
 
@@ -18,5 +18,6 @@ This project, called Gallery NFTs, is a web application developed using ASP.NET 
 - ![jQuery](https://img.shields.io/badge/-jQuery-0769AD?style=flat-square&logo=jquery&logoColor=white) jQuery - JavaScript library for simplifying HTML document traversing, event handling, and Ajax interactions.
 - ![Ajax](https://img.shields.io/badge/-Ajax-005571?style=flat-square&logo=ajax&logoColor=white) Ajax - Asynchronous JavaScript and XML.
 - ![Bootstrap](https://img.shields.io/badge/-Bootstrap-7952B3?style=flat-square&logo=bootstrap&logoColor=white) Bootstrap - Frontend framework for designing responsive and mobile-first websites.
+- ![RESTful API](https://img.shields.io/badge/-RESTful%20API-FF6C37?style=flat-square&logo=api&logoColor=white) RESTful API - A web service API architecture that allows external users to access information.
 - ![Visual Studio](https://img.shields.io/badge/-Visual%20Studio-5C2D91?style=flat-square&logo=visual-studio&logoColor=white) Visual Studio - Integrated development environment (IDE) for .NET framework development.
 
